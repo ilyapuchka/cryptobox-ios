@@ -278,18 +278,21 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
 
 - (BOOL)close:(NSError *__nullable * __nullable)error
 {
-    __block BOOL success = YES;
+    __block BOOL success = NO;
     dispatch_sync(self.cryptoBoxQueue, ^{
         if ([self isClosedInternally]) {
+            success = YES;
             return;
         }
-        if (! [self closeAllSessions:error]) {
-            success = NO;
-            return;
-        }
-        [self closeInternally];
     });
-    return success;
+    if(success) {
+        return success;
+    }
+    if (! [self closeAllSessions:error]) {
+        return NO;
+    }
+    [self closeInternally];
+    return YES;
 }
 
 - (BOOL)isClosed

@@ -60,8 +60,6 @@
     XCTAssertNotNil(bobSessionMessage);
     decrypted = [[NSString alloc] initWithData:bobSessionMessage.data encoding:NSUTF8StringEncoding];
     XCTAssertTrue([plain isEqualToString:decrypted]);
-    
-    NSLog(@"%s test_last_prekey finished", __PRETTY_FUNCTION__);
 }
 
 @end

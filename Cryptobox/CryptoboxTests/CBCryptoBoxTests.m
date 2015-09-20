@@ -28,6 +28,9 @@
 
 - (void)tearDown
 {
+    NSError *error;
+    [self.box close:&error];
+    XCTAssertNil(error, "Error in teardown: %@", error);
     [super tearDown];
 }
 
@@ -83,6 +86,17 @@
     CBPreKey *preKey = [self.box lastPreKey:&error];
     XCTAssertNil(error);
     XCTAssertNotNil(preKey);
+}
+
+- (void)testThatItCanBeClosedMultipleTimes
+{
+    NSError *error;
+    [self.box close:&error];
+    XCTAssertNil(error, "Error in closing: %@", error);
+    [self.box close:nil];
+    XCTAssertNil(error, "Error in closing: %@", error);
+    [self.box close:nil];
+    XCTAssertNil(error, "Error in closing: %@", error);
 }
 
 @end
