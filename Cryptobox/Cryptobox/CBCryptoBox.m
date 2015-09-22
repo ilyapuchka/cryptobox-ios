@@ -308,7 +308,7 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
     if ([self isClosedInternally]) {
         return;
     }
-    for (CBSession *session in self.sessions) {
+    for (CBSession *session in self.sessions.allValues) {
         [session close];
     }
     [self.sessions removeAllObjects];
