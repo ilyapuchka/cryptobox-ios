@@ -70,13 +70,27 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
     }
 }
 
-- (nullable CBSession *)sessionWithId:(nonnull NSString *)sessionId fromPreKey:(nonnull CBPreKey *)preKey error:(NSError *__nullable * __nullable)error
+- (nullable CBSession *)sessionWithId:(nonnull NSString *)sessionId fromPreKey:(nonnull CBPreKey *)preKey error:(NSError *__autoreleasing  __nullable * __nullable)error
+{
+    return [self sessionWithId:sessionId
+                fromPreKeyData:preKey.data
+                         error:error];
+}
+
+- (nullable CBSession *)sessionWithId:(nonnull NSString *)sessionId fromStringPreKey:(nonnull NSString *)base64StringKey error:(NSError *__autoreleasing  __nullable * __nullable)error
+{
+    return [self sessionWithId:sessionId
+                fromPreKeyData:[[NSData alloc] initWithBase64EncodedString:base64StringKey options:0]
+                         error:error];
+}
+
+- (nullable CBSession *)sessionWithId:(nonnull NSString *)sessionId fromPreKeyData:(nonnull NSData *)preKeyData error:(NSError *__autoreleasing  __nullable * __nullable)error
 {
     __block CBSession *session = nil;
     
     dispatch_sync(self.cryptoBoxQueue, ^{
         NSParameterAssert(sessionId);
-        NSParameterAssert(preKey);
+        NSParameterAssert(preKeyData);
         
         CBThrowIllegalStageExceptionIfClosed([self isClosedInternally]);
         
@@ -87,7 +101,7 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
         
         CBoxResult result;
         CBoxSessionRef sessionBacking = NULL;
-        result = cbox_session_init_from_prekey(self->_boxBacking, [sessionId UTF8String], preKey.dataArray, preKey.length, &sessionBacking);
+        result = cbox_session_init_from_prekey(self->_boxBacking, [sessionId UTF8String], preKeyData.bytes, preKeyData.length, &sessionBacking);
         CBAssertResultIsSuccess(result);
         CBReturnWithErrorIfNotSuccess(result, error);
         

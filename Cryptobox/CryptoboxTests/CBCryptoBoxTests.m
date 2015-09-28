@@ -85,4 +85,33 @@
     XCTAssertNotNil(preKey);
 }
 
+- (void)testThatItCreatesSessionFromPreKey
+{
+    CBCryptoBox *aliceBox = [self createBoxAndCheckAsserts:@"alice"];
+    CBCryptoBox *bobBox = [self createBoxAndCheckAsserts:@"bob"];
+    
+    CBPreKey *bobPreKey = [self generatePreKeyAndCheckAssertsWithLocation:1 box:bobBox];
+    
+    //Alice side
+    NSError *error = nil;
+    CBSession *aliceToBobSession = [aliceBox sessionWithId:@"sessionWithBob" fromPreKey:bobPreKey error:&error];
+    XCTAssertNil(error, @"Error is not nil");
+    XCTAssertNotNil(aliceToBobSession, @"Session creation from prekey failed");
+}
+
+- (void)testThatItCreatesSessionFromStringPreKey
+{
+    CBCryptoBox *aliceBox = [self createBoxAndCheckAsserts:@"alice"];
+    CBCryptoBox *bobBox = [self createBoxAndCheckAsserts:@"bob"];
+    
+    CBPreKey *bobPreKey = [self generatePreKeyAndCheckAssertsWithLocation:1 box:bobBox];
+    NSString *bobBase64StringKey = [bobPreKey.data base64EncodedStringWithOptions:0];
+    
+    //Alice side
+    NSError *error = nil;
+    CBSession *aliceToBobSession = [aliceBox sessionWithId:@"sessionWithBob" fromStringPreKey:bobBase64StringKey error:&error];
+    XCTAssertNil(error, @"Error is not nil");
+    XCTAssertNotNil(aliceToBobSession, @"Session creation from prekey failed");
+}
+
 @end

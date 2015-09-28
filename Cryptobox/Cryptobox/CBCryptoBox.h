@@ -31,6 +31,7 @@ FOUNDATION_EXPORT const NSUInteger CBMaxPreKeyID;
 /// @param error        Error reference
 /// @throws CBCodeIllegalStateException in case @c CBCryptoBox is closed already
 - (nullable CBSession *)sessionWithId:(nonnull NSString *)sessionId fromPreKey:(nonnull CBPreKey *)preKey error:(NSError *__nullable * __nullable)error;
+- (nullable CBSession *)sessionWithId:(nonnull NSString *)sessionId fromStringPreKey:(nonnull NSString *)base64StringKey error:(NSError *__nullable * __nullable)error;
 
 /// Initialise a @c CBSession using a received encrypted message.
 /// This is the entry point for the recipient of an encrypted message.
