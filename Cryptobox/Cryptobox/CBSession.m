@@ -73,13 +73,13 @@
         }
         
         CBoxResult result = cbox_encrypt(self->_sessionBacking, bytes, (uint32_t)plain.length, &cipher);
+        cbox_session_save(self->_sessionBacking);
         CBAssertResultIsSuccess(result);
         CBReturnWithErrorIfNotSuccess(result, error);
 
         CBVector *vector = [[CBVector alloc] initWithCBoxVecRef:cipher];
         data = vector.data;
     });
-    
     return data;
 }
 
@@ -97,6 +97,7 @@
         }
         CBoxVecRef plain = NULL;
         CBoxResult result = cbox_decrypt(self->_sessionBacking, bytes, (uint32_t)cipher.length, &plain);
+        cbox_session_save(self->_sessionBacking);
         CBAssertResultIsSuccess(result);
         CBReturnWithErrorIfNotSuccess(result, error);
         

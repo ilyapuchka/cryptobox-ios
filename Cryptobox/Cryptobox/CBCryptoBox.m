@@ -105,6 +105,7 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
         CBAssertResultIsSuccess(result);
         CBReturnWithErrorIfNotSuccess(result, error);
         
+        cbox_session_save(sessionBacking);
         session = [[CBSession alloc] initWithCBoxSessionRef:sessionBacking sessionId:sessionId];
         [self.sessions setObject:session forKey:sessionId];
     });
@@ -148,6 +149,7 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
                 return;
             }
             
+            cbox_session_save(sessionBacking);
             // Create the new session
             session = [[CBSession alloc] initWithCBoxSessionRef:sessionBacking sessionId:sessionId];
             [self.sessions setObject:session forKey:sessionId];
