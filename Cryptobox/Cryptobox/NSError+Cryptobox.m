@@ -18,8 +18,12 @@ CBErrorCode CBErrorCodeFromCBoxResult(CBoxResult result)
             return CBErrorCodeStorageError;
             break;
             
-        case CBOX_NO_SESSION:
+        case CBOX_SESSION_NOT_FOUND:
             return CBErrorCodeNoSession;
+            break;
+        
+        case CBOX_PREKEY_NOT_FOUND:
+            return CBErrorCodeNoPreKey;
             break;
             
         case CBOX_DECODE_ERROR:
@@ -28,6 +32,10 @@ CBErrorCode CBErrorCodeFromCBoxResult(CBoxResult result)
 
         case CBOX_REMOTE_IDENTITY_CHANGED:
             return CBErrorCodeRemoteIdentityChanged;
+            break;
+            
+        case CBOX_IDENTITY_ERROR:
+            return CBErrorCodeInvalidIdentity;
             break;
 
         case CBOX_INVALID_SIGNATURE:

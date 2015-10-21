@@ -481,7 +481,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DIRECTORY=\"${PROJECT_DIR}/../build\"\nif [ ! -d \"$DIRECTORY\" ]; then\necho \"Missing dependencies: ${DIRECTORY} folder doesn't exist.\"\necho \"Running 'make cryptobox-${CRYPTOBOX_VERSION}'\"\ncd .. && make cryptobox-\"${CRYPTOBOX_VERSION}\" && cd Cryptobox\nelse\necho \"Check for dependencies: OK\"\nfi";
+			shellScript = "DIRECTORY=\"${PROJECT_DIR}/../build\"\nif [ ! -d \"$DIRECTORY\" ]; then\necho \"Missing dependencies: ${DIRECTORY} folder doesn't exist.\"\necho \"Running 'make cryptobox-${CRYPTOBOX_VERSION}'\"\ncd .. && make cryptobox-\"${CRYPTOBOX_VERSION}\" && cd Cryptobox\nelse\necho \"Check for dependencies: OK\"\n#cd .. && make cryptobox-\"${CRYPTOBOX_VERSION}\" && cd Cryptobox\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -520,7 +520,7 @@
 			baseConfigurationReference = 0928E3741BA17E300057232E /* Cryptobox-ios.xcconfig */;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CRYPTOBOX_VERSION = 0.2.0;
+				CRYPTOBOX_VERSION = 0.4.0;
 				CURRENT_PROJECT_VERSION = 1;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				INFOPLIST_FILE = Cryptobox/Info.plist;
@@ -535,7 +535,7 @@
 			baseConfigurationReference = 0928E3741BA17E300057232E /* Cryptobox-ios.xcconfig */;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CRYPTOBOX_VERSION = 0.2.0;
+				CRYPTOBOX_VERSION = 0.4.0;
 				CURRENT_PROJECT_VERSION = 1;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				INFOPLIST_FILE = Cryptobox/Info.plist;
