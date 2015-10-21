@@ -55,7 +55,6 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
         
         CBoxRef cbox = NULL;
         CBoxResult result = cbox_file_open([directory.path UTF8String], &cbox);
-        CBAssertResultIsSuccess(result);
         CBReturnWithErrorIfNotSuccess(result, error);
         
         cryptoBox = [[CBCryptoBox alloc] initWithCBoxRef:cbox];
@@ -102,7 +101,6 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
         CBoxResult result;
         CBoxSessionRef sessionBacking = NULL;
         result = cbox_session_init_from_prekey(self->_boxBacking, [sessionId UTF8String], preKeyData.bytes, preKeyData.length, &sessionBacking);
-        CBAssertResultIsSuccess(result);
         CBReturnWithErrorIfNotSuccess(result, error);
         
         cbox_session_save(sessionBacking);
@@ -135,8 +133,6 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
             CBoxVecRef plain = NULL;
             const uint8_t *bytes = (const uint8_t*)message.bytes;
             CBoxResult result = cbox_session_init_from_message(self->_boxBacking, [sessionId UTF8String], bytes, (uint32_t)message.length, &sessionBacking, &plain);
-            CBAssertResultIsSuccess(result);
-
             CBReturnWithErrorIfNotSuccess(result, error);
 
             // Fetch the plain data
@@ -174,7 +170,6 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
         if (! session) {
             CBoxSessionRef sessionBacking = NULL;
             CBoxResult result = cbox_session_get(self->_boxBacking, [sessionId UTF8String], &sessionBacking);
-            CBAssertResultIsSuccess(result);
             CBReturnWithErrorIfNotSuccess(result, error);
             
             session = [[CBSession alloc] initWithCBoxSessionRef:sessionBacking sessionId:sessionId];
@@ -200,7 +195,6 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
         }
         
         CBoxResult result = cbox_session_delete(self->_boxBacking, [sessionId UTF8String]);
-        CBAssertResultIsSuccess(result);
         CBReturnWithErrorIfNotSuccess(result, error);
         
         success = YES;
