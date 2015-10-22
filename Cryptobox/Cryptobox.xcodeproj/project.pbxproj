@@ -481,7 +481,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DIRECTORY=\"${PROJECT_DIR}/../build\"\nif [ ! -d \"$DIRECTORY\" ]; then\necho \"Missing dependencies: ${DIRECTORY} folder doesn't exist.\"\necho \"Running 'make cryptobox-${CRYPTOBOX_VERSION}'\"\ncd .. && make cryptobox-\"${CRYPTOBOX_VERSION}\" && cd Cryptobox\nelse\necho \"Check for dependencies: OK\"\n#cd .. && make cryptobox-\"${CRYPTOBOX_VERSION}\" && cd Cryptobox\nfi";
+			shellScript = "DIRECTORY=\"${PROJECT_DIR}/../build\"\nif [ ! -d \"$DIRECTORY\" ]; then\n    echo \"Missing dependencies: ${DIRECTORY} folder doesn't exist.\"\n    echo \"Running 'make cryptobox-${CRYPTOBOX_VERSION}'\"\n    cd .. && make cryptobox-\"${CRYPTOBOX_VERSION}\"\nelse\n    echo \"Check for dependencies: OK\"\n    cd .. && make cryptobox-\"${CRYPTOBOX_VERSION}\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
