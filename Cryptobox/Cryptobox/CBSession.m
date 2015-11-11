@@ -12,7 +12,7 @@
 #import "CBPreKey.h"
 #import "CBVector+Internal.h"
 #import "CBSession+Internal.h"
-
+#import "CBCryptoBox+Internal.h"
 
 
 @interface CBSession () {
@@ -33,13 +33,13 @@
     }
 }
 
-- (BOOL)save:(NSError *__nullable * __nullable)error
+- (BOOL)save:(NSError *__autoreleasing  _Nullable *)error
 {
     __block BOOL success = NO;
     dispatch_sync(self.sessionQueue, ^{
         CBThrowIllegalStageExceptionIfClosed([self isClosedInternally]);
         
-        CBoxResult result = cbox_session_save(self->_sessionBacking);
+        CBoxResult result = cbox_session_save(self.box.box, self->_sessionBacking);
         CBAssertResultIsSuccess(result);
         CBReturnWithErrorIfNotSuccess(result, error);
         
@@ -58,7 +58,7 @@
     return closed;
 }
 
-- (nullable NSData *)encrypt:(nonnull NSData *)plain error:(NSError *__nullable * __nullable)error
+- (nullable NSData *)encrypt:(NSData *)plain error:(NSError *__autoreleasing  _Nullable *)error
 {
     __block NSData *data = nil;
     dispatch_sync(self.sessionQueue, ^{
@@ -73,7 +73,7 @@
         }
         
         CBoxResult result = cbox_encrypt(self->_sessionBacking, bytes, (uint32_t)plain.length, &cipher);
-        cbox_session_save(self->_sessionBacking);
+        cbox_session_save(self.box.box, self->_sessionBacking);
         CBAssertResultIsSuccess(result);
         CBReturnWithErrorIfNotSuccess(result, error);
 
@@ -83,7 +83,7 @@
     return data;
 }
 
-- (nullable NSData *)decrypt:(nonnull NSData *)cipher error:(NSError *__nullable * __nullable)error
+- (nullable NSData *)decrypt:(NSData *)cipher error:(NSError *__autoreleasing  _Nullable *)error
 {
     __block NSData *data = nil;
     dispatch_sync(self.sessionQueue, ^{
@@ -97,7 +97,7 @@
         }
         CBoxVecRef plain = NULL;
         CBoxResult result = cbox_decrypt(self->_sessionBacking, bytes, (uint32_t)cipher.length, &plain);
-        cbox_session_save(self->_sessionBacking);
+        cbox_session_save(self.box.box, self->_sessionBacking);
         CBAssertResultIsSuccess(result);
         CBReturnWithErrorIfNotSuccess(result, error);
         

@@ -5,9 +5,13 @@
 
 #import <Foundation/Foundation.h>
 
+@class CBCryptoBox;
+
 @interface CBSession : NSObject
 
 @property (nonatomic, readonly, copy, nonnull) NSString *sessionId;
+@property (nonatomic, weak, nullable) CBCryptoBox *box;
+
 
 /// @throws CBCodeIllegalStateException in case @c CBCryptoBox is closed already
 - (BOOL)save:(NSError *__nullable * __nullable)error;

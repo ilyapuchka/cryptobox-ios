@@ -103,9 +103,8 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
         result = cbox_session_init_from_prekey(self->_boxBacking, [sessionId UTF8String], preKeyData.bytes, preKeyData.length, &sessionBacking);
         CBReturnWithErrorIfNotSuccess(result, error);
         
-        cbox_session_save(sessionBacking);
-        session = [[CBSession alloc] initWithCBoxSessionRef:sessionBacking sessionId:sessionId];
-        [self.sessions setObject:session forKey:sessionId];
+        cbox_session_save(self->_boxBacking, sessionBacking);
+        session = [self createNewSessionWithId:sessionId backedBy:sessionBacking];
     });
     
     return session;
@@ -145,10 +144,8 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
                 return;
             }
             
-            cbox_session_save(sessionBacking);
-            // Create the new session
-            session = [[CBSession alloc] initWithCBoxSessionRef:sessionBacking sessionId:sessionId];
-            [self.sessions setObject:session forKey:sessionId];
+            cbox_session_save(self->_boxBacking, sessionBacking);
+            session = [self createNewSessionWithId:sessionId backedBy:sessionBacking];
             
             sessionMessage = [[CBSessionMessage alloc] initWithSession:session data:vector.data];
         }
@@ -169,14 +166,21 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
         NSAssert(! [session isClosed], @"Session is closed");
         if (! session) {
             CBoxSessionRef sessionBacking = NULL;
-            CBoxResult result = cbox_session_get(self->_boxBacking, [sessionId UTF8String], &sessionBacking);
+            CBoxResult result = cbox_session_load(self->_boxBacking, [sessionId UTF8String], &sessionBacking);
             CBReturnWithErrorIfNotSuccess(result, error);
             
-            session = [[CBSession alloc] initWithCBoxSessionRef:sessionBacking sessionId:sessionId];
-            [self.sessions setObject:session forKey:sessionId];
+            session = [self createNewSessionWithId:sessionId backedBy:sessionBacking];
         }
     });
     
+    return session;
+}
+
+- (nonnull CBSession *)createNewSessionWithId:(nonnull NSString *)sessionId backedBy:(nonnull CBoxSessionRef)sessionBacking
+{
+    CBSession *session = [[CBSession alloc] initWithCBoxSessionRef:sessionBacking sessionId:sessionId];
+    session.box = self;
+    [self.sessions setObject:session forKey:sessionId];
     return session;
 }
 
@@ -341,6 +345,11 @@ const NSUInteger CBMaxPreKeyID = 0xFFFE;
         self.cryptoBoxQueue = dispatch_queue_create("org.pkaboo.cryptobox.cryptoBoxQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
+}
+
+- (CBoxRef)box
+{
+    return _boxBacking;
 }
 
 @end

@@ -10,5 +10,6 @@
 @interface CBCryptoBox (Internal)
 
 - (nonnull instancetype)initWithCBoxRef:(nonnull CBoxRef)box;
+- (nonnull CBoxRef)box;
 
 @end
